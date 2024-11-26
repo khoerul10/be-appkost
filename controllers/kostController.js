@@ -1,6 +1,7 @@
 // controllers/kostController.js
 
-const { createKostModel, getKosts, getKostById } = require('../models/kostModel');
+const { createKostModel, getKosts, getKostById, getKostsWithSearch, getKostsBySearch } = require('../models/kostModel');
+const { formatResponse, HTTP_CODES } = require('../utils/responseFormatter');
 
 // Menambahkan Kost Baru
 const createKost = async (req, res) => {
@@ -39,12 +40,25 @@ const createKost = async (req, res) => {
 };
 
 // Mengambil Semua Data Kost
-const getKostsHandler = (req, res) => {
-    getKosts()
-        .then(kosts => res.status(200).json(kosts))
-        .catch(err => res.status(500).json({ error: err.message }));
-};
+// const getKostsHandler = (req, res) => {
+//     getKosts()
+//         .then(kosts => res.status(200).json(kosts))
+//         .catch(err => res.status(500).json({ error: err.message }));
+// };
+const getKostsHandler = async (req, res) => {
+    try {
+        const search = req.query.search || ''; // Ambil nilai `search` dari query parameter
 
+        // Panggil fungsi pencarian
+        const kosts = await getKostsBySearch(search);
+
+        // Format respons sukses
+        res.status(200).json(formatResponse(HTTP_CODES.SUCCESS, '', kosts));
+    } catch (err) {
+        // Format respons error
+        res.status(500).json(formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, err.message));
+    }
+};
 // Mengambil Kost berdasarkan ID
 const getKostByIdHandler = (req, res) => {
     const { id } = req.params;

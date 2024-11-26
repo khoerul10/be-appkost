@@ -22,6 +22,24 @@ const getKosts = () => {
     });
 };
 
+const getKostsBySearch = (search) => {
+    let query = 'SELECT * FROM kost WHERE 1=1';
+    const params = [];
+
+    // Sesuaikan logika berdasarkan nilai `search`
+    if (search) {
+        query += ' AND (nama_kost LIKE ? OR alamat LIKE ? OR fasilitas LIKE ?)';
+        params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+    }
+
+    return new Promise((resolve, reject) => {
+        db.query(query, params, (err, results) => {
+            if (err) reject(err);
+            resolve(results);
+        });
+    });
+};
+
 const getKostById = (id) => {
     return new Promise((resolve, reject) => {
         db.query('SELECT * FROM kost WHERE kost_id = ?', [id], (err, result) => {
@@ -31,4 +49,4 @@ const getKostById = (id) => {
     });
 };
 
-module.exports = { createKostModel, getKosts, getKostById };
+module.exports = { createKostModel, getKosts, getKostById, getKostsBySearch };

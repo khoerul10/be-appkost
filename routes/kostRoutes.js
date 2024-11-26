@@ -5,7 +5,7 @@ const { verifyToken } = require('../config/auth');
 const router = express.Router();
 
 router.post('/', verifyToken, createKost);
-router.get('/', getKostsHandler);
+router.get('/', verifyToken, getKostsHandler);
 router.get('/:id', getKostByIdHandler);
 
 module.exports = router;
