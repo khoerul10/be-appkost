@@ -8,6 +8,9 @@ const { registerSchema, loginSchema } = require('../schema/authSchema');
 const upload = multer();
 
 // Registrasi pengguna
+const { v4: uuidv4 } = require('uuid'); // Import uuid
+
+// Registrasi pengguna
 const register = async (req, res) => {
     const { error, value } = registerSchema.validate(req.body);
 
@@ -34,10 +37,13 @@ const register = async (req, res) => {
             );
         }
 
+        // Generate user_id menggunakan uuid
+        const user_id = uuidv4();
+
         // Hash password dan simpan ke database
         const hashedPassword = await bcrypt.hash(password, 10);
-        const query = 'INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)';
-        db.query(query, [username, hashedPassword, email, role], (err, result) => {
+        const query = 'INSERT INTO users (user_id, username, password, email, role) VALUES (?, ?, ?, ?, ?)';
+        db.query(query, [user_id, username, hashedPassword, email, role], (err, result) => {
             if (err) {
                 console.error("Error registering user:", err);  // Log error database
                 return res.status(500).json(formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Error registering user"));
@@ -49,6 +55,7 @@ const register = async (req, res) => {
         });
     });
 };
+
 
 
 // Login pengguna
