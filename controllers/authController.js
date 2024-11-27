@@ -1,66 +1,12 @@
-const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const db = require('../config/db');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
-const { registerSchema, loginSchema } = require('../schema/authSchema');
-
-const upload = multer();
-
-// Registrasi pengguna
-const { v4: uuidv4 } = require('uuid'); // Import uuid
-
-// Registrasi pengguna
-const register = async (req, res) => {
-    const { error, value } = registerSchema.validate(req.body);
-
-    // Validasi input menggunakan Joi.js
-    if (error) {
-        return res.status(HTTP_CODES.BAD_REQUEST.code).json(
-            formatResponse(HTTP_CODES.BAD_REQUEST, error.details[0].message)
-        );
-    }
-
-    const { username, password, email, role } = value;
-
-    // Mengecek apakah username sudah ada di database
-    const checkQuery = 'SELECT * FROM users WHERE username = ?';
-    db.query(checkQuery, [username], async (err, result) => {
-        if (err) {
-            console.error("Error checking username:", err);  // Log error database
-            return res.status(500).json(formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Error checking username"));
-        }
-
-        if (result.length > 0) {
-            return res.status(HTTP_CODES.BAD_REQUEST.code).json(
-                formatResponse(HTTP_CODES.BAD_REQUEST, "Username sudah terdaftar")
-            );
-        }
-
-        // Generate user_id menggunakan uuid
-        const user_id = uuidv4();
-
-        // Hash password dan simpan ke database
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const query = 'INSERT INTO users (user_id, username, password, email, role) VALUES (?, ?, ?, ?, ?)';
-        db.query(query, [user_id, username, hashedPassword, email, role], (err, result) => {
-            if (err) {
-                console.error("Error registering user:", err);  // Log error database
-                return res.status(500).json(formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Error registering user"));
-            }
-
-            res.status(HTTP_CODES.CREATED.code).json(
-                formatResponse(HTTP_CODES.CREATED, "User registered successfully")
-            );
-        });
-    });
-};
-
+const { loginSchema, registerSchema } = require('../schema/authSchema');
+const UserModel = require('../models/sequelize/user');
 
 
 // Login pengguna
 const login = [
-    upload.none(), // Middleware untuk mem-parsing multipart/form-data tanpa file
     async (req, res) => {
         const { error, value } = loginSchema.validate(req.body);
 
@@ -73,45 +19,108 @@ const login = [
 
         const { username, password } = value;
 
-        const query = 'SELECT * FROM users WHERE username = ?';
-        db.query(query, [username], async (err, result) => {
+        try {
+            // Menggunakan Sequelize untuk mencari user berdasarkan username
+            const user = await UserModel.findOne({ where: { username } });
+
             // username salah
-            if (err || result.length === 0) {
+            if (!user) {
                 return res.status(HTTP_CODES.BAD_REQUEST.code).json(
                     formatResponse(HTTP_CODES.BAD_REQUEST, "Username atau Password yang Anda masukkan salah")
                 );
             }
 
-            const user = result[0];
-            try {
-                const isMatch = await bcrypt.compare(password, user.password);
+            const isMatch = await bcrypt.compare(password, user.password);
 
-                // password salah
-                if (!isMatch) {
-                    return res.status(HTTP_CODES.BAD_REQUEST.code).json(
-                        formatResponse(HTTP_CODES.BAD_REQUEST, "Username atau Password yang Anda masukkan salah")
-                    );
-                }
-
-                if (!process.env.JWT_SECRET_KEY) {
-                    return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
-                        formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Konfigurasi JWT Secret tidak ditemukan")
-                    );
-                }
-                const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
-                return res.status(HTTP_CODES.SUCCESS.code).json(
-                    formatResponse(HTTP_CODES.SUCCESS, "Login berhasil", {
-                        user: { username: user.username, email: user.email, role: user.role },
-                        token: token
-                    })
-                );
-            } catch (err) {
-                return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
-                    formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Error comparing passwords")
+            // password salah
+            if (!isMatch) {
+                return res.status(HTTP_CODES.BAD_REQUEST.code).json(
+                    formatResponse(HTTP_CODES.BAD_REQUEST, "Username atau Password yang Anda masukkan salah")
                 );
             }
-        });
+
+            if (!process.env.JWT_SECRET_KEY) {
+                return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
+                    formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Konfigurasi JWT Secret tidak ditemukan")
+                );
+            }
+
+            const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+            return res.status(HTTP_CODES.SUCCESS.code).json(
+                formatResponse(HTTP_CODES.SUCCESS, "Login berhasil", {
+                    user: { username: user.username, email: user.email, role: user.role },
+                    token: token
+                })
+            );
+        } catch (err) {
+            return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
+                formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, "Error comparing passwords")
+            );
+        }
     }
 ];
+
+const register = async (req, res) => {
+    try {
+      const { error, value } = registerSchema.validate(req.body, { abortEarly: false });
+  
+      if (error) {
+        return res.status(400).json({
+          message: 'Validation error',
+          errors: error.details.map((err) => err.message),
+        });
+      }
+  
+      const { username, password, email, role, phone, address, status } = value;
+  
+      // Check username and email uniqueness
+      const [existingUser, existingEmail] = await Promise.all([
+        UserModel.findOne({ where: { username } }),
+        UserModel.findOne({ where: { email } }),
+      ]);
+  
+      if (existingUser) {
+        return res.status(400).json({ message: 'Username already exists' });
+      }
+  
+      if (existingEmail) {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+  
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      // Create user
+      const user = await UserModel.create({
+        user_id: uuidv4(),
+        username,
+        password: hashedPassword,
+        email,
+        role,
+        phone,
+        address,
+        status: status || 'active', // Default status
+      });
+  
+      res.status(201).json({
+        message: 'User created successfully',
+        data: {
+          user_id: user.user_id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
+          status: user.status,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Error creating user',
+        error: error.message,
+      });
+    }
+  };
+  
 
 module.exports = { register, login };

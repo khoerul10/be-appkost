@@ -36,11 +36,20 @@ const HTTP_CODES = {
 
 // Membantu untuk mengembalikan response dengan format yang konsisten
 const formatResponse = (responseCode, customMessage = '', customData = {}) => {
-    return {
+    const response = {
         code: responseCode.code,
         message: customMessage || responseCode.message,  // Menggunakan customMessage jika ada
         data: customData || {}  // Menggunakan customData jika ada, jika tidak, kosongkan objek
     };
+
+    // Menambahkan metaData jika customData memiliki panjang lebih dari 0
+    if (Array.isArray(customData) && customData.length !== 0) {
+        response.metaData = {
+            totalData : customData.length
+        }
+    }
+
+    return response;
 };
 
 module.exports = { HTTP_CODES, formatResponse };

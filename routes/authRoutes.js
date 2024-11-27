@@ -1,9 +1,12 @@
 // routes/authRoutes.js
 const express = require('express');
-const { register, login } = require('../controllers/authController');
-const router = express.Router();
+const { login, register } = require('../controllers/authController');
+const multer = require('multer');
 
-router.post('/register', register);
-router.post('/login', login);
+const router = express.Router();
+const upload = multer();
+
+router.post('/login', upload.none(), login);
+router.post('/register', upload.none(), register);
 
 module.exports = router;
