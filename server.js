@@ -11,7 +11,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
-app.use('/api/image', routes.imageRoutes);
 app.use('/api/auth', routes.authRoutes);
 app.use('/api/kost', routes.kostRoutes);
 app.use('/api/kriteria', routes.kriteriaRoutes);
