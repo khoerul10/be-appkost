@@ -1,4 +1,3 @@
-require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -7,6 +6,15 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+// async function testCloudinaryConnection() {
+//   try {
+//     const result = await cloudinary.api.ping();
+//     console.log('Koneksi ke Cloudinary berhasil:', result);
+//   } catch (error) {
+//     console.error('Gagal terhubung ke Cloudinary:', error);
+//   }
+// }
+
+// testCloudinaryConnection();
 
 module.exports = cloudinary;
- 

@@ -4,9 +4,11 @@ const KostModel = require('../../models/sequelize/kost');
 const { HTTP_CODES, formatResponse } = require('../../utils/responseFormatter');
 const { getHarga } = require('../../models/sequelize/kriteriaModel');
 const HargaModel = require('../../models/sequelize/harga');
+const multiUpload = require('../../middleware/middlewareUpload');
 
 // Create
 const createKost = async (req, res) => {
+  multiUpload.array('photos')
   try {
     const { nama_kost, harga } = req.body;
 
