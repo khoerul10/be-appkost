@@ -1,19 +1,18 @@
 const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../../config/sequelize');
+const sequelizeDb = require('../config/sequelize');
 
-const FasilitasModel = sequelizeDb.define('Fasilitas', {
-    id_fasilitas: {
+const LuaskamarModel = sequelizeDb.define('LuasKamar', {
+    id_luas: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    fasilitas: {
+    bobot: {
         type: DataTypes.STRING,
     },
 }, {
-    tableName: 'fasilitas',
+    tableName: 'luaskamar',
     timestamps: false,
 });
 
-
-module.exports = FasilitasModel;
+module.exports = LuaskamarModel;

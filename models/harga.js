@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../../config/sequelize');
+const sequelizeDb = require('../config/sequelize');
 
 const HargaModel = sequelizeDb.define('Harga', {
     harga_id: {
@@ -15,6 +15,9 @@ const HargaModel = sequelizeDb.define('Harga', {
     },
     max_harga: {
         type: DataTypes.INTEGER,
+    },
+    bobot: {
+        type: DataTypes.STRING,
     },
     // Kolom lainnya sesuai dengan struktur tabel
 }, {

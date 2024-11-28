@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../../config/sequelize');
+const sequelizeDb = require('../config/sequelize');
 
 const KeamananModel = sequelizeDb.define('Keamanan', {
     id_keamanan: {
@@ -8,6 +8,9 @@ const KeamananModel = sequelizeDb.define('Keamanan', {
         autoIncrement: true,
     },
     keamanan: {
+        type: DataTypes.STRING,
+    },
+    bobot: {
         type: DataTypes.STRING,
     },
 }, {

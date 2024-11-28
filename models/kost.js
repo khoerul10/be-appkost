@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../../config/sequelize');
+const sequelizeDb = require('../config/sequelize');
 const { v4: uuidv4 } = require('uuid'); 
 
 const KostModel = sequelizeDb.define('Kost', {
@@ -26,7 +26,7 @@ const KostModel = sequelizeDb.define('Kost', {
     allowNull: true,
   },
   harga: {
-    type: DataTypes.STRING(225),
+    type: DataTypes.INTEGER,
     allowNull: true,
   },
   status: {
@@ -48,6 +48,10 @@ const KostModel = sequelizeDb.define('Kost', {
     defaultValue: DataTypes.NOW,
   },
   harga_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  luas_id: {
     type: DataTypes.INTEGER,
     allowNull: true,
   },

@@ -16,6 +16,7 @@ app.use('/api/auth', routes.authRoutes);
 app.use('/api/kost', routes.kostRoutes);
 app.use('/api/kriteria', routes.kriteriaRoutes);
 app.use('/api/user', routes.userRoutes);
+app.use('/api/spk', routes.spkRoutes);
 
 // Start server
 app.listen(port, () => {

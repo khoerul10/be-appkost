@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
 const { loginSchema, registerSchema } = require('../schema/authSchema');
-const UserModel = require('../models/sequelize/user');
+const UserModel = require('../models/user');
 
 
 // Login pengguna

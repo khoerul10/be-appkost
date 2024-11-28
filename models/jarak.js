@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../../config/sequelize');
+const sequelizeDb = require('../config/sequelize');
 
 const JarakModel = sequelizeDb.define('Jarak', {
     id_jarak: {
@@ -9,6 +9,9 @@ const JarakModel = sequelizeDb.define('Jarak', {
     },
     jarak: {
         type: DataTypes.INTEGER,
+    },
+    bobot: {
+        type: DataTypes.STRING,
     },
 }, {
     tableName: 'jarak', // Nama tabel di database

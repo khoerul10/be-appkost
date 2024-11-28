@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers, getUserById, updateUser, deleteUser } = require('../controllers/sequelize/userController');
+const { createUser, getUsers, getUserById, updateUser, deleteUser } = require('../controllers/userController');
 const { verifyToken, isAdmin } = require('../config/auth');
 
 const router = express.Router();

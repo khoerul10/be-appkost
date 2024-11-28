@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
-const UserModel = require('../../models/sequelize/user');
-const { registerSchema, updateUserSchema } = require('../../schema/authSchema');
-const { HTTP_CODES, formatResponse } = require('../../utils/responseFormatter');
+const UserModel = require('../models/user');
+const { registerSchema, updateUserSchema } = require('../schema/authSchema');
+const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
 
 // **Create User**
 const createUser = async (req, res) => {

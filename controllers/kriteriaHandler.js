@@ -1,5 +1,5 @@
-const { getFasilitas, getHarga, getJarak, getKeamanan, getLuasKamar, getKeamananById } = require("../../models/sequelize/kriteriaModel");
-const { formatResponse, HTTP_CODES } = require("../../utils/responseFormatter");
+const { getFasilitas, getHarga, getJarak, getKeamanan, getLuasKamar, getKeamananById } = require("../models/kriteriaModel");
+const { formatResponse, HTTP_CODES } = require("../utils/responseFormatter");
 
 const getFasilitasHandler = (req, res) => {
     getFasilitas()

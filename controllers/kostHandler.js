@@ -1,43 +1,63 @@
 const { Op } = require('sequelize');
-const { FasilitasModel, KeamananModel } = require('../../models/sequelize');
-const KostModel = require('../../models/sequelize/kost');
-const { HTTP_CODES, formatResponse } = require('../../utils/responseFormatter');
-const { getHarga } = require('../../models/sequelize/kriteriaModel');
-const HargaModel = require('../../models/sequelize/harga');
-const multiUpload = require('../../middleware/middlewareUpload');
+const { FasilitasModel, KeamananModel } = require('../models');
+const KostModel = require('../models/kost');
+const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
+const { getHarga } = require('../models/kriteriaModel');
+const HargaModel = require('../models/harga');
 
 // Create
 const createKost = async (req, res) => {
-  multiUpload.array('photos')
   try {
     const { nama_kost, harga } = req.body;
 
+    // Validasi input harga
     const inputHarga = parseInt(harga, 10);
-
-    if (!req.files || req.files.length === 0 || req.files.length > 3) {
+    if (isNaN(inputHarga)) {
       return res.status(400).json({
         code: 400,
-        message: 'Upload maksimal 3 file!',
+        message: "Harga harus berupa angka.",
       });
     }
 
-    // Validasi: Cek apakah nama kost sudah ada
+    // Validasi file upload
+    if (!req.files || req.files.length === 0 || req.files.length > 3) {
+      return res.status(400).json({
+        code: 400,
+        message: "Upload maksimal 3 file!",
+      });
+    }
+
+    // Validasi nama kost
     const existingKost = await KostModel.findOne({ where: { nama_kost } });
     if (existingKost) {
       return res.status(400).json({
         code: 400,
-        message: 'Nama kost sudah digunakan. Silakan pilih nama lain.',
+        message: "Nama kost sudah digunakan. Silakan pilih nama lain.",
       });
     }
 
-    const hargaRange = await getHarga(inputHarga);
-    
-    const resultHarga = hargaRange[0].dataValues.harga_id;  // Ambil ID dari hasil query
+    // Cari data harga berdasarkan input harga
+    const hargaRange = await HargaModel.findOne({
+      where: {
+        min_harga: { [Op.lte]: inputHarga }, // min_harga <= inputHarga
+        max_harga: { [Op.gte]: inputHarga }, // max_harga >= inputHarga
+      },
+      attributes: ["harga_id", "min_harga", "max_harga"], // Ambil hanya harga_id
+    });
 
-    console.log('contoh',  hargaRange[0].dataValues)
-    console.log('contoh resultHarga', resultHarga)
+    console.log('hargaRange', hargaRange);
 
-    // Proses file dari Cloudinary
+    if (!hargaRange) {
+      return res.status(400).json({
+        code: 400,
+        message: "Harga tidak sesuai dengan rentang harga yang tersedia.",
+      });
+    }
+
+    // Ambil harga_id dari hasil query
+    const resultHarga = hargaRange.harga_id;
+
+    // Proses file upload
     const photoUrls = req.files.map((file) => file.path); // URL file
     const thumbImage = photoUrls[0]; // Thumbnail dari file pertama
 
@@ -46,15 +66,19 @@ const createKost = async (req, res) => {
       ...req.body,
       photos: JSON.stringify(photoUrls),
       thumb_image: thumbImage,
-      harga_id : resultHarga
+      harga_id: resultHarga, // Masukkan harga_id yang sesuai
     });
 
-    res.status(201).json({
-      message: 'Kost berhasil ditambahkan',
+    return res.status(201).json({
+      message: "Kost berhasil ditambahkan",
       data: kost,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error saat membuat kost:", error); // Logging error untuk debugging
+    return res.status(500).json({
+      message: "Terjadi kesalahan pada server.",
+      error: error.message,
+    });
   }
 };
 
@@ -64,12 +88,13 @@ const getAllKosts = async (req, res) => {
     const { search } = req.query;
     const kosts = await KostModel.findAll({
       where: {
-        [Op.or]: ['nama_kost', 'alamat', 'deskripsi'].map(field => ({
+        [Op.or]: ['nama_kost', 'alamat'].map(field => ({
           [field]: {
             [Op.like]: `%${search}%`,
           }
         }))
-      }
+      },
+      order: [['created_at', 'DESC']], 
     });
     if (!kosts || kosts.length === 0) {
       res.status(HTTP_CODES.NOT_FOUND.code).json(

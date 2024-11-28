@@ -1,7 +1,7 @@
 // routes/kostRoutes.js
 const express = require('express');
 const { verifyToken } = require('../config/auth');
-const { getFasilitasHandler, getHargaHandler, getJarakHandler, getLuasKamarHandler, getKeamananHandler, getKeamananByIdHandler } = require('../controllers/sequelize/kriteriaHandler');
+const { getFasilitasHandler, getHargaHandler, getJarakHandler, getLuasKamarHandler, getKeamananHandler, getKeamananByIdHandler } = require('../controllers/kriteriaHandler');
 const router = express.Router();
 
 router.get('/fasilitas', verifyToken, getFasilitasHandler);
