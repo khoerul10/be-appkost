@@ -4,6 +4,7 @@
 
 ---
 
+
 ## Fitur Utama
 
 - **Autentikasi**: Registrasi, login, dan manajemen token JWT.
@@ -39,25 +40,29 @@
 
 1. Clone repositori:
    ```bash
-   git clone https://github.com/username/be-appkost.git
+   git clone https://github.com/khoerul10/be-appkost.git
    cd be-appkost
 
 2. Instal dependensi:
+   ```bash
    npm install
 
 3. Konfigurasi file .env:
    Buat file .env di root folder dengan isi seperti .env.example
 
 4. Migrasi database: Jalankan script untuk membuat atau memperbarui tabel database:
+   ```bash
    npx sequelize db:migrate
 
 5. Menjalankan Server:
 
-   - Menggunakan nodemon (mode pengembangan): 
-     nodemon server.js
+- Menggunakan nodemon (mode pengembangan): 
+   ```bash
+   nodemon server.js
      
-   - Atau secara langsung:
-     npm start
+- Atau secara langsung:
+   ```bash
+   npm start
 
 
 ### Struktur Proyek
@@ -75,16 +80,16 @@ be-appkost/
 
 ### Script NPM 
 
-- npm install: Instalasi semua dependensi.
-- nodemon server.js: Menjalankan server dalam mode pengembangan.
+- **npm install**: Instalasi semua dependensi.
+- **nodemon server.js**: Menjalankan server dalam mode pengembangan.
 
 
 ### Kontak
 
 Untuk pertanyaan, saran, atau informasi lainnya terkait proyek ini, silakan hubungi:
 
-- Email: khoerulsarifudin01@gmail.com
-- GitHub: khoerul10
+- **Email**: khoerulsarifudin01@gmail.com
+- **GitHub**: khoerul10
 
 
 Dokumen ini dirancang untuk mendukung pengembangan aplikasi pencarian kost berbasis SPK sebagai bagian dari proyek skripsi. Informasi yang disediakan bertujuan agar jelas, informatif, dan mudah dipahami oleh pembaca, baik untuk kebutuhan pengujian maupun pengembangan lebih lanjut. Silakan mengganti placeholder seperti URL GitHub dan informasi kontak sesuai kebutuhan proyek skripsi Anda.
