@@ -66,16 +66,16 @@
 
 
 ### Struktur Proyek
-
-be-appkost/
-├── config/               # Konfigurasi database dan environment
-├── controllers/          # Logika kontrol aplikasi
-├── middleware/           # Middleware untuk autentikasi, validasi, dll.
-├── models/               # Model Sequelize
-├── routes/               # Rute API
-├── utils/                # Fungsi utility
-├── server.js             # File entry utama
-└── .env.example          # Contoh file konfigurasi
+   ```bash
+   be-appkost/
+   ├── config/               # Konfigurasi database dan environment
+   ├── controllers/          # Logika kontrol aplikasi
+   ├── middleware/           # Middleware untuk autentikasi, validasi, dll.
+   ├── models/               # Model Sequelize
+   ├── routes/               # Rute API
+   ├── utils/                # Fungsi utility
+   ├── server.js             # File entry utama
+   └── .env.example          # Contoh file konfigurasi
 
 
 ### Script NPM 
