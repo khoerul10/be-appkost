@@ -65,26 +65,27 @@
    npm start
 
 
-### Struktur Proyek
-   ```bash
-   be-appkost/
-   ├── config/               # Konfigurasi database dan environment
-   ├── controllers/          # Logika kontrol aplikasi
-   ├── middleware/           # Middleware untuk autentikasi, validasi, dll.
-   ├── models/               # Model Sequelize
-   ├── routes/               # Rute API
-   ├── utils/                # Fungsi utility
-   ├── server.js             # File entry utama
-   └── .env.example          # Contoh file konfigurasi
+## Struktur Proyek
+
+```bash
+be-appkost/
+├── config/               # Konfigurasi database dan environment
+├── controllers/          # Logika kontrol aplikasi
+├── middleware/           # Middleware untuk autentikasi, validasi, dll.
+├── models/               # Model Sequelize
+├── routes/               # Rute API
+├── utils/                # Fungsi utility
+├── server.js             # File entry utama
+└── .env.example          # Contoh file konfigurasi
 
 
-### Script NPM 
+## Script NPM 
 
 - **npm install**: Instalasi semua dependensi.
 - **nodemon server.js**: Menjalankan server dalam mode pengembangan.
 
 
-### Kontak
+## Kontak
 
 Untuk pertanyaan, saran, atau informasi lainnya terkait proyek ini, silakan hubungi:
 
