@@ -65,20 +65,6 @@
    npm start
 
 
-## Struktur Proyek
-
-```bash
-be-appkost/
-├── config/               # Konfigurasi database dan environment
-├── controllers/          # Logika kontrol aplikasi
-├── middleware/           # Middleware untuk autentikasi, validasi, dll.
-├── models/               # Model Sequelize
-├── routes/               # Rute API
-├── utils/                # Fungsi utility
-├── server.js             # File entry utama
-└── .env.example          # Contoh file konfigurasi
-
-
 ## Script NPM 
 
 - **npm install**: Instalasi semua dependensi.
@@ -94,3 +80,17 @@ Untuk pertanyaan, saran, atau informasi lainnya terkait proyek ini, silakan hubu
 
 
 Dokumen ini dirancang untuk mendukung pengembangan aplikasi pencarian kost berbasis SPK sebagai bagian dari proyek skripsi. Informasi yang disediakan bertujuan agar jelas, informatif, dan mudah dipahami oleh pembaca, baik untuk kebutuhan pengujian maupun pengembangan lebih lanjut. Silakan mengganti placeholder seperti URL GitHub dan informasi kontak sesuai kebutuhan proyek skripsi Anda.
+
+## Struktur Proyek
+
+```bash
+be-appkost/
+├── config/               # Konfigurasi database dan environment
+├── controllers/          # Logika kontrol aplikasi
+├── middleware/           # Middleware untuk autentikasi, validasi, dll.
+├── models/               # Model Sequelize
+├── routes/               # Rute API
+├── utils/                # Fungsi utility
+├── server.js             # File entry utama
+└── .env.example          # Contoh file konfigurasi
+
