@@ -46,7 +46,7 @@ const UserModel = sequelizeDb.define('User', {
   status: {
     type: DataTypes.ENUM('active', 'inactive'),
     defaultValue: 'active',
-  },
+  }
 }, {
   tableName: 'users',
   timestamps: false,
