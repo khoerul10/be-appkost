@@ -45,11 +45,11 @@ const login = [
                 );
             }
 
-            const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.user_id, role: user.role }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
             return res.status(HTTP_CODES.SUCCESS.code).json(
                 formatResponse(HTTP_CODES.SUCCESS, "Login berhasil", {
-                    user: { username: user.username, email: user.email, role: user.role },
-                    token: token
+                   username: user.username, email: user.email, role: user.role, token: token
+                    
                 })
             );
         } catch (err) {
@@ -92,7 +92,6 @@ const register = async (req, res) => {
   
       // Create user
       const user = await UserModel.create({
-        user_id: uuidv4(),
         username,
         password: hashedPassword,
         email,

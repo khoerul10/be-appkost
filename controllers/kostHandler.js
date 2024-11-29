@@ -1,9 +1,10 @@
 const { Op } = require('sequelize');
-const { FasilitasModel, KeamananModel } = require('../models');
+const { FasilitasModel, KeamananModel, JarakModel } = require('../models');
 const KostModel = require('../models/kost');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
 const { getHarga } = require('../models/kriteriaModel');
 const HargaModel = require('../models/harga');
+const LuaskamarModel = require('../models/luaskamar');
 
 // Create
 const createKost = async (req, res) => {
@@ -116,22 +117,35 @@ const getAllKosts = async (req, res) => {
 const getKostById = async (req, res) => {
   try {
     const kost = await KostModel.findByPk(req.params.kost_id, {
+      
       include: [
         {
-          model: FasilitasModel,
-          as: 'fasilitasDetail', // Alias yang ditentukan saat membuat relasi
-          attributes: ['id_fasilitas', 'fasilitas'], // Kolom yang diambil dari Fasilitas
-        },{
-          model: KeamananModel,
-          as: 'keamananDetail', // Alias yang ditentukan saat membuat relasi
-          attributes: ['keamanan'], // Kolom yang diambil dari Fasilitas
-        },{
-          model: HargaModel,
-          as: 'hargaDetail', // Alias yang ditentukan saat membuat relasi
-          attributes: ['min_harga', 'max_harga'], // Kolom yang diambil dari Fasilitas
-        }
-      ],
-      attributes: ['kost_id', 'nama_kost', 'alamat', 'jenis_kost', 'harga']
+            model: HargaModel,
+            as: 'hargaDetail',
+            attributes: ['bobot'],
+        },
+        {
+            model: FasilitasModel,
+            as: 'fasilitasDetail',
+            attributes: ['fasilitas'],
+        },
+        {
+            model: JarakModel,
+            as: 'jarakDetail',
+            attributes: ['jarak'],
+        },
+        {
+            model: LuaskamarModel,
+            as: 'luaskamarDetail',
+            attributes: ['panjang','lebar','luas'],
+        },
+        {
+            model: KeamananModel,
+            as: 'keamananDetail',
+            attributes: ['keamanan'],
+        },
+    ],
+      // attributes: ['kost_id', 'nama_kost', 'alamat', 'jenis_kost', 'harga']
     });
     if (kost) {
       res.status(HTTP_CODES.SUCCESS.code).json(

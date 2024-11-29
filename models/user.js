@@ -1,11 +1,12 @@
 const { DataTypes } = require('sequelize');
 const sequelizeDb = require('../config/sequelize');
+const { v4: uuidv4 } = require('uuid'); 
 
 const UserModel = sequelizeDb.define('User', {
   user_id: {
-    type: DataTypes.STRING(36),
+    type: DataTypes.STRING(255),
     primaryKey: true,
-    allowNull: false,
+    defaultValue: () => uuidv4(), // untuk menghasilkan UUID secara otomatis
   },
   username: {
     type: DataTypes.STRING(30),

@@ -3,7 +3,6 @@ const { v4: uuidv4 } = require('uuid');
 
 // Skema validasi untuk registrasi
 const registerSchema = Joi.object({
-    user_id: Joi.string().default(() => uuidv4()), // Default UUID
     username: Joi.string().alphanum().min(3).max(30).required(),
     password: Joi.string().min(8).max(50).required(),
     email: Joi.string().email().required(),

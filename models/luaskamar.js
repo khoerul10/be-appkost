@@ -7,6 +7,15 @@ const LuaskamarModel = sequelizeDb.define('LuasKamar', {
         primaryKey: true,
         autoIncrement: true,
     },
+    panjang: {
+        type: DataTypes.INTEGER,
+    },
+    lebar: {
+        type: DataTypes.INTEGER,
+    },
+    luas: {
+        type: DataTypes.INTEGER,
+    },
     bobot: {
         type: DataTypes.STRING,
     },

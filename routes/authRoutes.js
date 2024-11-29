@@ -4,7 +4,10 @@ const { login, register } = require('../controllers/authController');
 
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer();
+
 router.post('/login', login);
-router.post('/register', register);
+router.post('/register',upload.none(), register);
 
 module.exports = router;

@@ -5,6 +5,7 @@ module.exports = {
     kriteriaRoutes: require('./kriteriaRoutes'),
     userRoutes: require('./userRoutes'),
     spkRoutes: require('./spkRoutes'),
+    rekomendasiRoutes: require('./rekomendasiRoutes'),
   };
   
   
