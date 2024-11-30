@@ -40,7 +40,7 @@ const login = [
       }
 
       const accessToken = generateToken(
-        { id: user.user_id, role: user.role },
+        { id: user.user_id, user: user.username, email: user.email, role: user.role },
         process.env.JWT_SECRET_KEY,
         '1d' // Durasi diperpanjang
       );
@@ -184,7 +184,7 @@ const refreshToken = async (req, res) => {
     }
 
     const newAccessToken = generateToken(
-      { id: user.user_id, role: user.role },
+      { id: user.user_id, user: user.username, email: user.email, role: user.role },
       process.env.JWT_SECRET_KEY,
       '1d' // Durasi diperpanjang
     );

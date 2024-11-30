@@ -25,6 +25,7 @@ const verifyToken = (req, res, next) => {
 
 // Middleware untuk memverifikasi peran admin
 const isAdmin = (req, res, next) => {
+    console.log('decoded req.user', req)
     if (req.user.role !== 'admin') {
         return res.status(403).json({ message: 'Forbidden: You do not have admin privileges' });
     }
