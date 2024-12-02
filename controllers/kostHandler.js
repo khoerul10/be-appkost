@@ -113,6 +113,27 @@ const getAllKosts = async (req, res) => {
   }
 };
 
+const getAllKostsByHarga = async (req, res) => {
+  try {
+    const kosts = await KostModel.findAll({
+      order: [['harga', 'ASC']], 
+    });
+    if (!kosts || kosts.length === 0) {
+      res.status(HTTP_CODES.NOT_FOUND.code).json(
+        formatResponse(HTTP_CODES.NOT_FOUND, 'Kost tidak ditemukan')
+      );
+    } else {
+      res.status(HTTP_CODES.SUCCESS.code).json(
+        formatResponse(HTTP_CODES.SUCCESS, '', kosts)
+      );
+    }
+  } catch (error) {
+    res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
+      formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, error.message)
+    );
+  }
+};
+
 // Read One
 const getKostById = async (req, res) => {
   try {
@@ -210,4 +231,5 @@ module.exports = {
   getKostById,
   updateKost,
   deleteKost,
+  getAllKostsByHarga
 };
