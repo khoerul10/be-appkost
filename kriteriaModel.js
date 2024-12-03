@@ -1,8 +1,8 @@
-const HargaModel = require('./harga');
-const KeamananModel = require('./keamanan');
-const JarakModel = require('./jarak');
-const LuasKamar = require('./luaskamar');
-const FasilitasModel = require('./fasilitas');
+const HargaModel = require('./models/harga');
+const KeamananModel = require('./models/keamanan');
+const JarakModel = require('./models/jarak');
+const LuasKamar = require('./models/luaskamar');
+const FasilitasModel = require('./models/fasilitas');
 const { Sequelize } = require('sequelize');
 
 const getHarga = (input_harga) => {

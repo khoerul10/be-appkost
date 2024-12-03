@@ -1,8 +1,6 @@
 const { Sequelize } = require("sequelize");
-const { KostModel } = require("../models");
-const RekomendasiModel = require("../models/rekomendasi");
-const UserModel = require("../models/user");
 const { HTTP_CODES, formatResponse } = require("../utils/responseFormatter");
+const db = require('../models');
 
 // Controller untuk menambahkan rekomendasi
 const createRekomendasi = async (req, res) => {
@@ -12,13 +10,13 @@ const createRekomendasi = async (req, res) => {
         const user_id = req.user.id;
         const { kost_id } = req.body;
 
-        const kost = await KostModel.findByPk(kost_id);
+        const kost = await db.Kost.findByPk(kost_id);
 
         if (!kost) {
             return res.status(HTTP_CODES.NOT_FOUND.code).json(formatResponse(HTTP_CODES.NOT_FOUND, 'Kost not found'));
         }
 
-        const cekRekomendasi = await RekomendasiModel.findAll({
+        const cekRekomendasi = await db.Rekomendasi.findAll({
             where: { user_id, kost_id },
         });
 
@@ -29,7 +27,7 @@ const createRekomendasi = async (req, res) => {
         } 
 
         // Buat entri rekomendasi baru
-        const newRekomendasi = await RekomendasiModel.create({
+        const newRekomendasi = await db.Rekomendasi.create({
             kost_id,
             user_id,
         });
@@ -45,10 +43,10 @@ const createRekomendasi = async (req, res) => {
 const getRekomendasiIsAdmin = async (req, res) => {
     try {
         // Query data rekomendasi berdasarkan user_id
-        const rekomendasiUser = await RekomendasiModel.findAll({
+        const rekomendasiUser = await db.Rekomendasi.findAll({
             include: [
-                { model: UserModel, as: 'user', attributes: ['username', 'email'] },
-                { model: KostModel, as: 'kost', attributes: ['nama_kost'] },
+                { model: db.User, as: 'user', attributes: ['username', 'email'] },
+                { model: db.Kost, as: 'kost', attributes: ['nama_kost'] },
             ],
         });
 
@@ -67,11 +65,11 @@ const getRekomendasiByUser = async (req, res) => {
         const user_id = req.user.id;
 
         // Query data rekomendasi berdasarkan user_id
-        const rekomendasiUser = await RekomendasiModel.findAll({
+        const rekomendasiUser = await db.Rekomendasi.findAll({
             where: { user_id },
             include: [
-                { model: UserModel, as: 'user', attributes: ['username', 'email'] },
-                { model: KostModel, as: 'kost', attributes: ['nama_kost'] },
+                { model: db.User, as: 'user', attributes: ['username', 'email'] },
+                { model: db.Kost, as: 'kost', attributes: ['nama_kost'] },
             ],
         });
 
@@ -96,11 +94,11 @@ const getRekomendasiByKost = async (req, res) => {
         }
 
         // Query data rekomendasi berdasarkan user_id
-        const rekomendasiOne = await RekomendasiModel.findAll({
+        const rekomendasiOne = await db.Rekomendasi.findAll({
             where: { user_id, kost_id },
             include: [
-                { model: UserModel, as: 'user', attributes: ['username', 'email'] },
-                { model: KostModel, as: 'kost', attributes: ['nama_kost'] },
+                { model: db.User, as: 'user', attributes: ['username', 'email'] },
+                { model: db.Kost, as: 'kost', attributes: ['nama_kost'] },
             ],
         });
 
@@ -123,7 +121,7 @@ const getRekomendasiByKost = async (req, res) => {
 const getRekomendasiByFavorit = async (req, res) => {
     try {
         // Query data rekomendasi, group by kost_id, and count occurrences
-        const rekomendasiRaw = await RekomendasiModel.findAll({
+        const rekomendasiRaw = await db.Rekomendasi.findAll({
             attributes: [
                 'kost_id',
                 [Sequelize.fn('COUNT', Sequelize.col('kost_id')), 'total_id'],
@@ -141,7 +139,7 @@ const getRekomendasiByFavorit = async (req, res) => {
         const topKostIds = rekomendasiList.slice(0, 5).map((item) => item.id);
 
         // Query kosts data based on top 5 kost_id
-        const kosts = await KostModel.findAll({
+        const kosts = await db.Kost.findAll({
             where: {
                 kost_id: topKostIds,
             },
@@ -165,7 +163,7 @@ const deleteRekomendasi = async (req, res) => {
         const { id_rekomendasi } = req.params;
 
         // Cari dan hapus entri rekomendasi jika cocok dengan id_rekomendasi dan user_id
-        const deleted = await RekomendasiModel.destroy({
+        const deleted = await db.Rekomendasi.destroy({
             where: { id_rekomendasi, user_id },
         });
 

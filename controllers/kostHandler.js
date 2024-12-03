@@ -1,10 +1,6 @@
 const { Op } = require('sequelize');
-const { FasilitasModel, KeamananModel, JarakModel } = require('../models');
-const KostModel = require('../models/kost');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
-const { getHarga } = require('../models/kriteriaModel');
-const HargaModel = require('../models/harga');
-const LuaskamarModel = require('../models/luaskamar');
+const db = require('../models');
 
 // Create
 const createKost = async (req, res) => {
@@ -29,7 +25,7 @@ const createKost = async (req, res) => {
     }
 
     // Validasi nama kost
-    const existingKost = await KostModel.findOne({ where: { nama_kost } });
+    const existingKost = await db.Kost.findOne({ where: { nama_kost } });
     if (existingKost) {
       return res.status(400).json({
         code: 400,
@@ -38,7 +34,7 @@ const createKost = async (req, res) => {
     }
 
     // Cari data harga berdasarkan input harga
-    const hargaRange = await HargaModel.findOne({
+    const hargaRange = await db.Harga.findOne({
       where: {
         min_harga: { [Op.lte]: inputHarga }, // min_harga <= inputHarga
         max_harga: { [Op.gte]: inputHarga }, // max_harga >= inputHarga
@@ -63,7 +59,7 @@ const createKost = async (req, res) => {
     const thumbImage = photoUrls[0]; // Thumbnail dari file pertama
 
     // Simpan data ke database
-    const kost = await KostModel.create({
+    const kost = await db.Kost.create({
       ...req.body,
       photos: JSON.stringify(photoUrls),
       thumb_image: thumbImage,
@@ -87,7 +83,7 @@ const createKost = async (req, res) => {
 const getAllKosts = async (req, res) => {
   try {
     const { search } = req.query;
-    const kosts = await KostModel.findAll({
+    const kosts = await db.Kost.findAll({
       where: {
         [Op.or]: ['nama_kost', 'alamat'].map(field => ({
           [field]: {
@@ -115,7 +111,7 @@ const getAllKosts = async (req, res) => {
 
 const getAllKostsByHarga = async (req, res) => {
   try {
-    const kosts = await KostModel.findAll({
+    const kosts = await db.Kost.findAll({
       order: [['harga', 'ASC']], 
     });
     if (!kosts || kosts.length === 0) {
@@ -137,31 +133,30 @@ const getAllKostsByHarga = async (req, res) => {
 // Read One
 const getKostById = async (req, res) => {
   try {
-    const kost = await KostModel.findByPk(req.params.kost_id, {
-      
+    const kost = await db.Kost.findByPk(req.params.kost_id, {
       include: [
         {
-            model: HargaModel,
+            model: db.Harga,
             as: 'hargaDetail',
             attributes: ['bobot'],
         },
         {
-            model: FasilitasModel,
+            model: db.Fasilitas,
             as: 'fasilitasDetail',
             attributes: ['fasilitas'],
         },
         {
-            model: JarakModel,
+            model: db.Jarak,
             as: 'jarakDetail',
             attributes: ['jarak'],
         },
         {
-            model: LuaskamarModel,
+            model: db.LuasKamar,
             as: 'luaskamarDetail',
             attributes: ['panjang','lebar','luas'],
         },
         {
-            model: KeamananModel,
+            model: db.Keamanan,
             as: 'keamananDetail',
             attributes: ['keamanan'],
         },
@@ -187,7 +182,7 @@ const getKostById = async (req, res) => {
 // Update
 const updateKost = async (req, res) => {
   try {
-    const updated = await KostModel.update(req.body, { where: { kost_id: req.params.kost_id } });
+    const updated = await db.Kost.update(req.body, { where: { kost_id: req.params.kost_id } });
     if (updated[0] > 0) {
       res.status(HTTP_CODES.SUCCESS.code).json(
         formatResponse(HTTP_CODES.SUCCESS, 'Kost berhasil diperbarui')
@@ -207,7 +202,7 @@ const updateKost = async (req, res) => {
 // Delete
 const deleteKost = async (req, res) => {
   try {
-    const deleted = await KostModel.destroy({ where: { kost_id: req.params.kost_id } });
+    const deleted = await db.Kost.destroy({ where: { kost_id: req.params.kost_id } });
     if (deleted) {
       res.status(HTTP_CODES.SUCCESS.code).json(
         formatResponse(HTTP_CODES.SUCCESS, 'Kost berhasil dihapus')

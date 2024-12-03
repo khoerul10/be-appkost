@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
 const { loginSchema, registerSchema } = require('../schema/authSchema');
-const UserModel = require('../models/user');
+const db = require('../models');
 
 // Fungsi untuk membuat token
 const generateToken = (payload, secret, expiresIn) => {
@@ -23,7 +23,7 @@ const login = [
     const { username, password } = value;
 
     try {
-      const user = await UserModel.findOne({ where: { username } });
+      const user = await db.User.findOne({ where: { username } });
 
       if (!user) {
         return res
@@ -78,7 +78,7 @@ const logout = async (req, res) => {
   }
 
   try {
-    const user = await UserModel.findOne({ where: { refreshToken } });
+    const user = await db.User.findOne({ where: { refreshToken } });
 
     if (!user) {
       return res.status(HTTP_CODES.FORBIDDEN.code).json(
@@ -114,8 +114,8 @@ const register = async (req, res) => {
 
   try {
     const [existingUser, existingEmail] = await Promise.all([
-      UserModel.findOne({ where: { username } }),
-      UserModel.findOne({ where: { email } }),
+      db.User.findOne({ where: { username } }),
+      db.User.findOne({ where: { email } }),
     ]);
 
     if (existingUser) {
@@ -132,7 +132,7 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12); // Kompleksitas salt ditingkatkan
 
-    const user = await UserModel.create({
+    const user = await db.User.create({
       username,
       password: hashedPassword,
       email,
@@ -175,7 +175,7 @@ const refreshToken = async (req, res) => {
   try {
     const userPayload = jwt.verify(token, process.env.JWT_REFRESH_SECRET_KEY);
 
-    const user = await UserModel.findOne({ where: { user_id: userPayload.id } });
+    const user = await db.User.findOne({ where: { user_id: userPayload.id } });
 
     if (!user) {
       return res.status(HTTP_CODES.FORBIDDEN.code).json(

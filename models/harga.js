@@ -1,28 +1,39 @@
-const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../config/sequelize');
-
-const HargaModel = sequelizeDb.define('Harga', {
-    harga_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-    },
-    range_harga: {
-        type: DataTypes.INTEGER,
-    },
-    min_harga: {
-        type: DataTypes.INTEGER,
-    },
-    max_harga: {
-        type: DataTypes.INTEGER,
-    },
-    bobot: {
-        type: DataTypes.STRING,
-    },
-    // Kolom lainnya sesuai dengan struktur tabel
-}, {
-    tableName: 'harga', // Nama tabel dalam database
-    timestamps: false,  // Nonaktifkan jika tabel tidak memiliki createdAt dan updatedAt
-});
-
-module.exports = HargaModel;
+module.exports = (sequelize, DataTypes) => {
+    const Harga = sequelize.define(
+      'Harga',
+      {
+        harga_id: {
+          type: DataTypes.INTEGER,
+          primaryKey: true,
+          autoIncrement: true,
+        },
+        range_harga: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        min_harga: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        max_harga: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        bobot: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {
+        tableName: 'harga',
+        timestamps: false,
+      }
+    );
+  
+    Harga.associate = (models) => {
+      Harga.hasMany(models.Kost, { foreignKey: 'harga_id', sourceKey: 'harga_id' });
+    };
+  
+    return Harga;
+  };
+  

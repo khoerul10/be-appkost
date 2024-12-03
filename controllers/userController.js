@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
-const UserModel = require('../models/user');
 const { registerSchema, updateUserSchema } = require('../schema/authSchema');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
+const db = require('../models');
 
 // **Create User**
 const createUser = async (req, res) => {
@@ -21,8 +21,8 @@ const createUser = async (req, res) => {
 
     // Check username and email uniqueness
     const [existingUser, existingEmail] = await Promise.all([
-      UserModel.findOne({ where: { username } }),
-      UserModel.findOne({ where: { email } }),
+      db.User.findOne({ where: { username } }),
+      db.User.findOne({ where: { email } }),
     ]);
 
     if (existingUser) {
@@ -37,7 +37,7 @@ const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create user
-    const user = await UserModel.create({
+    const user = await db.User.create({
       user_id: uuidv4(),
       username,
       password: hashedPassword,
@@ -69,7 +69,7 @@ const createUser = async (req, res) => {
 // **Get All Users**
 const getUsers = async (req, res) => {
   try {
-    const users = await UserModel.findAll();
+    const users = await db.User.findAll();
     return res.status(HTTP_CODES.SUCCESS.code).json(formatResponse(HTTP_CODES.SUCCESS, '',  users));
   } catch (error) {
     return res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
@@ -82,7 +82,7 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await UserModel.findByPk(id);
+    const user = await db.User.findByPk(id);
 
     if (!user) {
       return res.status(HTTP_CODES.NOT_FOUND.code).json(formatResponse(HTTP_CODES.NOT_FOUND, 'User not found'));
@@ -110,7 +110,7 @@ const updateUser = async (req, res) => {
       );
     }
 
-    const updated = await UserModel.update(value, { where: { user_id: id } });
+    const updated = await db.User.update(value, { where: { user_id: id } });
 
     if (updated[0] === 0) {
       return res.status(HTTP_CODES.NOT_FOUND.code).json(formatResponse(HTTP_CODES.NOT_FOUND, 'User not found or not updated'));
@@ -128,7 +128,7 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await UserModel.destroy({ where: { user_id: id } });
+    const deleted = await db.User.destroy({ where: { user_id: id } });
 
     if (!deleted) {
       return res.status(HTTP_CODES.NOT_FOUND.code).json(formatResponse(HTTP_CODES.NOT_FOUND, 'User not found or already deleted'));

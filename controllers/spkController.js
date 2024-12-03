@@ -1,8 +1,6 @@
 const { Op } = require('sequelize');
-const { FasilitasModel, KeamananModel, HargaModel, JarakModel } = require('../models');
-const KostModel = require('../models/kost');
-const LuaskamarModel = require('../models/luaskamar');
 const { HTTP_CODES, formatResponse } = require('../utils/responseFormatter');
+const db = require('../models');
 
 const getSpkHandler = async (req, res) => {
     try {
@@ -10,17 +8,17 @@ const getSpkHandler = async (req, res) => {
         const { harga, id_fasilitas, id_luas, id_jarak, id_keamanan } = req.query; // Mengambil parameter id dari URL
 
         // Mengambil bobot dari setiap model berdasarkan ID
-        const hargaData = await HargaModel.findOne({
+        const hargaData = await db.Harga.findOne({
           where: {
               min_harga: { [Op.lte]: harga }, // harga_input harus lebih besar atau sama dengan min_harga
               max_harga: { [Op.gte]: harga }, // harga_input harus lebih kecil atau sama dengan max_harga
           },
         });
         const bobotHarga = hargaData ? hargaData.bobot : 0;
-        const bobotFasilitas = (await FasilitasModel.findByPk(id_fasilitas))?.bobot || 0;
-        const bobotJarak = (await JarakModel.findByPk(id_jarak))?.bobot || 0;
-        const bobotLuas = (await LuaskamarModel.findByPk(id_luas))?.bobot || 0;
-        const bobotKeamanan = (await KeamananModel.findByPk(id_keamanan))?.bobot || 0;
+        const bobotFasilitas = (await db.Fasilitas.findByPk(id_fasilitas))?.bobot || 0;
+        const bobotJarak = (await db.Jarak.findByPk(id_jarak))?.bobot || 0;
+        const bobotLuas = (await db.LuasKamar.findByPk(id_luas))?.bobot || 0;
+        const bobotKeamanan = (await db.Keamanan.findByPk(id_keamanan))?.bobot || 0;
 
 
         const vector = [bobotHarga, bobotFasilitas, bobotJarak, bobotLuas, bobotKeamanan];
@@ -30,7 +28,7 @@ const getSpkHandler = async (req, res) => {
         console.log('hargaData.max_harga', hargaData.max_harga)
 
         // Fetch data kost beserta relasinya
-        const kostData = await KostModel.findAll({
+        const kostData = await db.Kost.findAll({
           // hapus where jika tidak filter range harga
            where: {
                 harga: {
@@ -40,27 +38,27 @@ const getSpkHandler = async (req, res) => {
             },
             include: [
                 {
-                    model: HargaModel,
+                    model: db.Harga,
                     as: 'hargaDetail',
                     attributes: ['bobot'],
                 },
                 {
-                    model: FasilitasModel,
+                    model: db.Fasilitas,
                     as: 'fasilitasDetail',
                     attributes: ['bobot'],
                 },
                 {
-                    model: JarakModel,
+                    model: db.Jarak,
                     as: 'jarakDetail',
                     attributes: ['bobot'],
                 },
                 {
-                    model: LuaskamarModel,
+                    model: db.LuasKamar,
                     as: 'luaskamarDetail',
                     attributes: ['bobot'],
                 },
                 {
-                    model: KeamananModel,
+                    model: db.Keamanan,
                     as: 'keamananDetail',
                     attributes: ['bobot'],
                 },

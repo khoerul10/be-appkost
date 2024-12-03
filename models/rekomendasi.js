@@ -1,28 +1,46 @@
-const { DataTypes } = require('sequelize');
-const sequelizeDb = require('../config/sequelize');
-const { v4: uuidv4 } = require('uuid'); 
+const { v4: uuidv4 } = require('uuid');
 
-const RekomendasiModel = sequelizeDb.define('Rekomendasi', {
-    id_rekomendasi: {
+module.exports = (sequelize, DataTypes) => {
+  const Rekomendasi = sequelize.define(
+    'Rekomendasi',
+    {
+      id_rekomendasi: {
         type: DataTypes.STRING(255),
         primaryKey: true,
-        defaultValue: () => uuidv4(), // untuk menghasilkan UUID secara otomatis
-    },
-    kost_id: {
+        defaultValue: () => uuidv4(), // Untuk menghasilkan UUID secara otomatis
+      },
+      kost_id: {
         type: DataTypes.STRING(255),
         allowNull: false,
-    },
-    user_id: {
+        references: {
+          model: 'kost', // Nama tabel kost
+          key: 'kost_id',
+        },
+      },
+      user_id: {
         type: DataTypes.STRING(255),
         allowNull: false,
-    },
-    created_at: {
+        references: {
+          model: 'user', // Nama tabel user
+          key: 'user_id',
+        },
+      },
+      created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW, // mencatat waktu pembuatan entri
+        allowNull: false,
+        defaultValue: DataTypes.NOW, // Mencatat waktu pembuatan entri
+      },
     },
-}, {
-    tableName: 'rekomendasi',
-    timestamps: false, // jika tidak ingin menggunakan timestamps otomatis (createdAt, updatedAt)
-});
+    {
+      tableName: 'rekomendasi',
+      timestamps: false, // Tidak menggunakan timestamps otomatis (createdAt, updatedAt)
+    }
+  );
 
-module.exports = RekomendasiModel;
+  Rekomendasi.associate = (models) => {
+    Rekomendasi.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+    Rekomendasi.belongsTo(models.Kost, { foreignKey: 'kost_id', as: 'kost' });
+  };
+
+  return Rekomendasi;
+};
