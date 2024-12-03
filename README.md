@@ -51,8 +51,17 @@
    Buat file .env di root folder dengan isi seperti .env.example
 
 4. Migrasi database: Jalankan script untuk membuat atau memperbarui tabel database:
+- konfigurasi database: (config/config.js : sesauikan dengan koneksi database)
+- buat database: (buat )
+   ```bash
+   npx sequelize db:create
+
+- buat tabel
    ```bash
    npx sequelize db:migrate
+
+- seeder tabel
+  ```bash
 
 5. Menjalankan Server:
 

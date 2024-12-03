@@ -27,17 +27,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.ENUM('admin', 'user'),
         allowNull: false,
       },
-      created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
-        onUpdate: DataTypes.NOW,
-      },
       phone: {
         type: DataTypes.STRING(15),
         allowNull: true,
@@ -49,6 +38,17 @@ module.exports = (sequelize, DataTypes) => {
       status: {
         type: DataTypes.ENUM('active', 'inactive'),
         defaultValue: 'active',
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        onUpdate: DataTypes.NOW,
       },
     },
     {
