@@ -20,8 +20,6 @@ const createRekomendasi = async (req, res) => {
             where: { user_id, kost_id },
         });
 
-        console.log('cekRekomendasi', cekRekomendasi)
-
         if (cekRekomendasi.length !== 0) {
             return res.status(HTTP_CODES.BAD_REQUEST.code).json(formatResponse(HTTP_CODES.BAD_REQUEST, 'Rekomendasi sudah ada'));
         } 
@@ -69,7 +67,7 @@ const getRekomendasiByUser = async (req, res) => {
             where: { user_id },
             include: [
                 { model: db.User, as: 'user', attributes: ['username', 'email'] },
-                { model: db.Kost, as: 'kost', attributes: ['nama_kost', 'harga', 'alamat'] },
+                { model: db.Kost, as: 'kost', attributes: ['nama_kost', 'harga', 'alamat', 'thumb_image'] },
             ],
         });
 
