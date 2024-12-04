@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
       user_id: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull: false,
         defaultValue: Sequelize.UUIDV4,
@@ -57,23 +57,3 @@ module.exports = {
     await queryInterface.dropTable('users');
   },
 };
-
-// module.exports = {
-//   async up (queryInterface, Sequelize) {
-//     /**
-//      * Add altering commands here.
-//      *
-//      * Example:
-//      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
-//      */
-//   },
-
-//   async down (queryInterface, Sequelize) {
-//     /**
-//      * Add reverting commands here.
-//      *
-//      * Example:
-//      * await queryInterface.dropTable('users');
-//      */
-//   }
-// };
