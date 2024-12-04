@@ -69,7 +69,7 @@ const getRekomendasiByUser = async (req, res) => {
             where: { user_id },
             include: [
                 { model: db.User, as: 'user', attributes: ['username', 'email'] },
-                { model: db.Kost, as: 'kost', attributes: ['nama_kost'] },
+                { model: db.Kost, as: 'kost', attributes: ['nama_kost', 'harga', 'alamat'] },
             ],
         });
 
