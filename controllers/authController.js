@@ -55,6 +55,9 @@ const login = [
 
       return res.status(HTTP_CODES.SUCCESS.code).json(
         formatResponse(HTTP_CODES.SUCCESS, "Login berhasil", {
+          name: user.username,
+          email: user.email,
+          role: user.role,
           accessToken,
           refreshToken,
         })

@@ -5,7 +5,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('rekomendasi', {
       id_rekomendasi: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.UUID(255),
         primaryKey: true,
         allowNull: false,
         defaultValue: Sequelize.UUIDV4, // Nilai default UUID
