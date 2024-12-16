@@ -14,6 +14,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      satuan: {
+        type: Sequelize.ENUM('meter', 'kilometer'),
+        allowNull: true,
+      },
       bobot: {
         type: Sequelize.STRING,
         allowNull: false,

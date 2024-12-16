@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           allowNull: false,
         },
+        satuan: {
+          type: DataTypes.ENUM('meter', 'kilometer'),
+          allowNull: true,
+        },
         bobot: {
           type: DataTypes.STRING,
           allowNull: false,
