@@ -69,6 +69,7 @@ const getRekomendasiByUser = async (req, res) => {
                 { model: db.User, as: 'user', attributes: ['username', 'email'] },
                 { model: db.Kost, as: 'kost', attributes: ['nama_kost', 'harga', 'alamat', 'thumb_image'] },
             ],
+            order: [["created_at", "DESC"]], // Sort by createdAt, newest first
         });
 
         return res.status(HTTP_CODES.SUCCESS.code).json(formatResponse(HTTP_CODES.SUCCESS, 'Rekomendasi retrieved successfully', rekomendasiUser ));

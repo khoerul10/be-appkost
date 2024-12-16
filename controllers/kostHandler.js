@@ -17,12 +17,12 @@ const createKost = async (req, res) => {
     }
 
     // Validasi file upload
-    if (!req.files || req.files.length === 0 || req.files.length > 3) {
-      return res.status(400).json({
-        code: 400,
-        message: "Upload maksimal 3 file!",
-      });
-    }
+    // if (!req.files || req.files.length === 0 || req.files.length > 3) {
+    //   return res.status(400).json({
+    //     code: 400,
+    //     message: "Upload maksimal 3 file!",
+    //   });
+    // }
 
     // Validasi nama kost
     const existingKost = await db.Kost.findOne({ where: { nama_kost } });
@@ -82,8 +82,10 @@ const createKost = async (req, res) => {
 // Read All
 const getAllKosts = async (req, res) => {
   try {
-    const { search } = req.query;
-    const kosts = await db.Kost.findAll({
+    const { search, limit } = req.query;
+
+    // Default query options
+    const queryOptions = {
       where: {
         [Op.or]: ['nama_kost', 'alamat'].map(field => ({
           [field]: {
@@ -91,8 +93,19 @@ const getAllKosts = async (req, res) => {
           }
         }))
       },
-      order: [['created_at', 'DESC']], 
-    });
+      order: [['created_at', 'DESC']],
+    };
+
+    // Apply limit only if it is provided
+    if (limit) {
+      const parsedLimit = parseInt(limit, 10);
+      if (!isNaN(parsedLimit) && parsedLimit > 0) {
+        queryOptions.limit = parsedLimit;
+      }
+    }
+
+    const kosts = await db.Kost.findAll(queryOptions);
+
     if (!kosts || kosts.length === 0) {
       res.status(HTTP_CODES.NOT_FOUND.code).json(
         formatResponse(HTTP_CODES.NOT_FOUND, 'Kost tidak ditemukan')
@@ -148,7 +161,7 @@ const getKostById = async (req, res) => {
         {
             model: db.Jarak,
             as: 'jarakDetail',
-            attributes: ['jarak'],
+            attributes: ['jarak', 'satuan'],
         },
         {
             model: db.LuasKamar,
