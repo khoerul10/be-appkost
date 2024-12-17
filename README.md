@@ -62,6 +62,7 @@
 
 - seeder tabel
   ```bash
+  npx sequelize db:seed:all
 
 5. Menjalankan Server:
 

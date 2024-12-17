@@ -56,7 +56,7 @@ const createKost = async (req, res) => {
 
     // Proses file upload
     const photoUrls = req.files.map((file) => file.path); // URL file
-    const thumbImage = photoUrls[0]; // Thumbnail dari file pertama
+    const thumbImage = photoUrls.length > 0 ? photoUrls[0] : null; 
 
     // Simpan data ke database
     const kost = await db.Kost.create({
@@ -195,20 +195,79 @@ const getKostById = async (req, res) => {
 // Update
 const updateKost = async (req, res) => {
   try {
-    const updated = await db.Kost.update(req.body, { where: { kost_id: req.params.kost_id } });
-    if (updated[0] > 0) {
-      res.status(HTTP_CODES.SUCCESS.code).json(
-        formatResponse(HTTP_CODES.SUCCESS, 'Kost berhasil diperbarui')
-      );
-    } else {
-      res.status(HTTP_CODES.NOT_FOUND.code).json(
-        formatResponse(HTTP_CODES.NOT_FOUND, 'Kost tidak ditemukan')
-      );
+    const { kost_id } = req.params; // Ambil ID kost dari parameter URL
+    const { nama_kost, harga } = req.body;
+
+    // Validasi input harga
+    const inputHarga = parseInt(harga, 10);
+    if (isNaN(inputHarga)) {
+      return res.status(400).json({
+        code: 400,
+        message: "Harga harus berupa angka.",
+      });
     }
+
+    // Validasi keberadaan kost berdasarkan ID
+    const existingKost = await db.Kost.findByPk(kost_id);
+    if (!existingKost) {
+      return res.status(404).json({
+        code: 404,
+        message: "Kost tidak ditemukan.",
+      });
+    }
+
+    // Validasi nama kost jika berubah
+    if (nama_kost && nama_kost !== existingKost.nama_kost) {
+      const kostWithSameName = await db.Kost.findOne({ where: { nama_kost } });
+      if (kostWithSameName) {
+        return res.status(400).json({
+          code: 400,
+          message: "Nama kost sudah digunakan. Silakan pilih nama lain.",
+        });
+      }
+    }
+
+    // Cari data harga berdasarkan input harga
+    const hargaRange = await db.Harga.findOne({
+      where: {
+        min_harga: { [Op.lte]: inputHarga }, // min_harga <= inputHarga
+        max_harga: { [Op.gte]: inputHarga }, // max_harga >= inputHarga
+      },
+      attributes: ["harga_id", "min_harga", "max_harga"],
+    });
+
+    if (!hargaRange) {
+      return res.status(400).json({
+        code: 400,
+        message: "Harga tidak sesuai dengan rentang harga yang tersedia.",
+      });
+    }
+
+    // Ambil harga_id dari hasil query
+    const resultHarga = hargaRange.harga_id;
+
+    // Proses file upload jika ada file yang diunggah
+    const photoUrls = req.files.map((file) => file.path); // URL file
+    const thumbImage = photoUrls.length > 0 ? photoUrls[0] : null; // Thumbnail dari file pertama
+
+    // Update data kost di database
+    await existingKost.update({
+      ...req.body,
+      photos: JSON.stringify(photoUrls),
+      thumb_image: thumbImage,
+      harga_id: resultHarga,
+    });
+
+    return res.status(200).json({
+      message: "Kost berhasil diperbarui",
+      data: existingKost,
+    });
   } catch (error) {
-    res.status(HTTP_CODES.INTERNAL_SERVER_ERROR.code).json(
-      formatResponse(HTTP_CODES.INTERNAL_SERVER_ERROR, error.message)
-    );
+    console.error("Error saat mengupdate kost:", error); // Logging error untuk debugging
+    return res.status(500).json({
+      message: "Terjadi kesalahan pada server.",
+      error: error.message,
+    });
   }
 };
 
