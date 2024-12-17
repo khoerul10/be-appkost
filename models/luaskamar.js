@@ -1,11 +1,14 @@
+const { v4: uuidv4 } = require('uuid');
+
 module.exports = (sequelize, DataTypes) => {
     const LuasKamar = sequelize.define(
       'LuasKamar',
       {
         id_luas: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING(255),
           primaryKey: true,
-          autoIncrement: true,
+          allowNull: false,
+          defaultValue: () => uuidv4(),
         },
         panjang: {
           type: DataTypes.INTEGER,

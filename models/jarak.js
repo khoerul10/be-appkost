@@ -1,11 +1,14 @@
+const { v4: uuidv4 } = require('uuid');
+
 module.exports = (sequelize, DataTypes) => {
     const Jarak = sequelize.define(
       'Jarak',
       {
         id_jarak: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING(255),
           primaryKey: true,
-          autoIncrement: true,
+          allowNull: false,
+          defaultValue: () => uuidv4(),
         },
         jarak: {
           type: DataTypes.INTEGER,

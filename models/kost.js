@@ -49,24 +49,44 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.NOW,
       },
       harga_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        references: {
+          model: 'harga', // Nama tabel harga
+          key: 'harga_id',
+        },
       },
       luas_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        references: {
+          model: 'luaskamar', // Nama tabel kost
+          key: 'id_luas',
+        },
       },
       fasilitas_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        references: {
+          model: 'fasilitas', // Nama tabel kost
+          key: 'id_fasilitas',
+        },
       },
       jarak_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        references: {
+          model: 'jarak', // Nama tabel kost
+          key: 'id_jarak',
+        },
       },
       keamanan_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+        type: DataTypes.STRING(255),
+        allowNull: false,
+        references: {
+          model: 'keamanan', // Nama tabel kost
+          key: 'id_keamanan',
+        },
       },
       thumb_image: {
         type: DataTypes.STRING(255),

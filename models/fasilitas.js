@@ -1,11 +1,14 @@
+const { v4: uuidv4 } = require('uuid');
+
 module.exports = (sequelize, DataTypes) => {
     const Fasilitas = sequelize.define(
       'Fasilitas',
       {
         id_fasilitas: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING(255),
           primaryKey: true,
-          autoIncrement: true,
+          allowNull: false,
+          defaultValue: () => uuidv4(),
         },
         fasilitas: {
           type: DataTypes.STRING,
