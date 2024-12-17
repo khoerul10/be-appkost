@@ -35,7 +35,7 @@ module.exports = {
         allowNull: true,
       },
       harga_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'harga',
@@ -45,7 +45,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       kebersihan_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'kebersihan',
@@ -55,7 +55,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       luas_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'luaskamar',
@@ -65,7 +65,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       fasilitas_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'fasilitas',
@@ -75,7 +75,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       jarak_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'jarak',
@@ -85,7 +85,7 @@ module.exports = {
         onDelete: 'SET NULL',
       },
       keamanan_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: true,
         references: {
           model: 'keamanan',
