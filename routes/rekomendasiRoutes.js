@@ -9,8 +9,8 @@ router.post('/', upload.none(), verifyToken, createRekomendasi);
 router.get('/', verifyToken, getRekomendasiByUser);
 router.get('/favorit', verifyToken, getRekomendasiByFavorit);
 router.get('/kost/:kost_id', verifyToken, getRekomendasiByKost);
-router.get('/admin/', verifyToken, getRekomendasiIsAdmin);
 router.delete('/:id_rekomendasi', verifyToken, deleteRekomendasi);
+router.get('/admin/', verifyToken, isAdmin, getRekomendasiIsAdmin);
 router.delete('/admin/:id_rekomendasi', verifyToken, isAdmin, deleteRekomendasi);
 
 module.exports = router;

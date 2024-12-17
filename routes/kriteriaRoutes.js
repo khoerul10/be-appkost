@@ -19,37 +19,37 @@ const upload = multer(); // Konfigurasi default untuk parsing `multipart/form-da
 //fasilitas 
 router.get('/fasilitas', verifyToken, getFasilitasHandler);
 router.get('/fasilitas/:id', verifyToken, getFasilitasByIdHandler);
-router.post('/fasilitas', upload.none(), verifyToken, addFasilitasHandler);
-router.post('/fasilitas/:id', upload.none(), verifyToken, updateFasilitasHandler);
-router.delete('/fasilitas/:id', verifyToken, deleteFasilitasHandler);
+router.post('/fasilitas', upload.none(), verifyToken, isAdmin, addFasilitasHandler);
+router.post('/fasilitas/:id', upload.none(), verifyToken, isAdmin, updateFasilitasHandler);
+router.delete('/fasilitas/:id', verifyToken, isAdmin, deleteFasilitasHandler);
 
 // harga
-router.get('/harga', verifyToken, isAdmin, getHargaHandler);
+router.get('/harga', verifyToken, getHargaHandler);
 router.get('/harga/:id', verifyToken, getHargaByIdHandler);
-router.post('/harga', upload.none(), verifyToken, addHargaHandler);
-router.post('/harga/:id', upload.none(), verifyToken, updateHargaHandler);
-router.delete('/harga/:id', verifyToken, deleteHargaHandler);
+router.post('/harga', upload.none(), verifyToken, isAdmin, addHargaHandler);
+router.post('/harga/:id', upload.none(), verifyToken, isAdmin, updateHargaHandler);
+router.delete('/harga/:id', verifyToken, isAdmin, deleteHargaHandler);
 
 // keamanan
-router.get('/keamanan', verifyToken, isAdmin, getKeamananHandler);
+router.get('/keamanan', verifyToken, getKeamananHandler);
 router.get('/keamanan/:id', verifyToken, getKeamananByIdHandler);
-router.post('/keamanan', upload.none(), verifyToken, addKeamananHandler);
-router.post('/keamanan/:id', upload.none(), verifyToken, updateKeamananHandler);
-router.delete('/keamanan/:id', verifyToken, deleteKeamananHandler);
+router.post('/keamanan', upload.none(), verifyToken, isAdmin, addKeamananHandler);
+router.post('/keamanan/:id', upload.none(), verifyToken, isAdmin, updateKeamananHandler);
+router.delete('/keamanan/:id', verifyToken, isAdmin, deleteKeamananHandler);
 
 // jarak
-router.get('/jarak', verifyToken, isAdmin, getJarakHandler);
+router.get('/jarak', verifyToken, getJarakHandler);
 router.get('/jarak/:id', verifyToken, getJarakByIdHandler);
-router.post('/jarak', upload.none(), verifyToken, addJarakHandler);
-router.post('/jarak/:id', upload.none(), verifyToken, updateJarakHandler);
-router.delete('/jarak/:id', verifyToken, deleteJarakHandler);
+router.post('/jarak', upload.none(), verifyToken, isAdmin, addJarakHandler);
+router.post('/jarak/:id', upload.none(), verifyToken, isAdmin, updateJarakHandler);
+router.delete('/jarak/:id', verifyToken, isAdmin, deleteJarakHandler);
 
 // luaskamar
-router.get('/luaskamar', verifyToken, isAdmin, getLuasKamarHandler);
+router.get('/luaskamar', verifyToken, getLuasKamarHandler);
 router.get('/luaskamar/:id', verifyToken, getLuastKamarByIdHandler);
-router.post('/luaskamar', upload.none(), verifyToken, addLuasKamarHandler);
-router.post('/luaskamar/:id', upload.none(), verifyToken, updateLuasKamarHandler);
-router.delete('/luaskamar/:id', verifyToken, deleteLuasKamarHandler);
+router.post('/luaskamar', upload.none(), verifyToken, isAdmin, addLuasKamarHandler);
+router.post('/luaskamar/:id', upload.none(), verifyToken, isAdmin, updateLuasKamarHandler);
+router.delete('/luaskamar/:id', verifyToken, isAdmin, deleteLuasKamarHandler);
 
 
 module.exports = router;
