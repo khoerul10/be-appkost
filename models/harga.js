@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         range_harga: {
           type: DataTypes.INTEGER,
-          allowNull: false,
+          allowNull: true,
         },
         min_harga: {
           type: DataTypes.INTEGER,
