@@ -1,9 +1,10 @@
 module.exports = {
   development: {
-    username: "root",
-    password: '',
+    username: "k0stdb",
+    password: "Coegsekali1!",
     database: "appkost",
-    host: "127.0.0.1",
+    host: "kostdbdata.cfciyq6so3dn.ap-southeast-1.rds.amazonaws.com",
     dialect: "mysql",
   },
 };
+
