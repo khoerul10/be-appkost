@@ -19,6 +19,9 @@ app.use('/api/user', routes.userRoutes);
 app.use('/api/spk', routes.spkRoutes);
 app.use('/api/rekomendasi', routes.rekomendasiRoutes);
 
+app.get("/", (req, res) => {
+    res.json({message: "Backend kost"})
+})
 // Start server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
