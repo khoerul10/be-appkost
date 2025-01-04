@@ -18,6 +18,18 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+      pemilik: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      no_telp: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      maps: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       deskripsi: {
         type: Sequelize.TEXT,
         allowNull: true,

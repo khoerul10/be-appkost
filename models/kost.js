@@ -18,6 +18,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      no_telp: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      pemilik: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      maps: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
       deskripsi: {
         type: DataTypes.TEXT,
         allowNull: true,
