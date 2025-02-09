@@ -18,6 +18,7 @@ app.use('/api/kriteria', routes.kriteriaRoutes);
 app.use('/api/user', routes.userRoutes);
 app.use('/api/spk', routes.spkRoutes);
 app.use('/api/rekomendasi', routes.rekomendasiRoutes);
+app.use('/api/report', routes.reportRoutes);
 
 app.get("/", (req, res) => {
     res.json({message: "Backend kost"})

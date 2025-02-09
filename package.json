@@ -19,6 +19,7 @@
     "body-parser": "^1.20.3",
     "cloudinary": "^1.21.0",
     "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "fs": "^0.0.1-security",
@@ -29,6 +30,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "mysql2": "^3.11.5",
     "npm": "^10.9.0",
+    "pdfkit": "^0.16.0",
     "sequelize": "^6.37.5",
     "uuid": "^11.0.3"
   },
