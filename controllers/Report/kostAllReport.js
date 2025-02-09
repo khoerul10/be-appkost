@@ -1,6 +1,8 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const { format } = require('date-fns');
+const { id } = require('date-fns/locale');
 const os = require('os');
 const crypto = require('crypto');
 const db = require('../../models');
@@ -15,6 +17,27 @@ const getAllKostReport = async (req, res) => {
         formatResponse(HTTP_CODES.NOT_FOUND, 'No kosts found')
       );
     }
+    
+            const logoPath = path.resolve(__dirname, '../../assets/image/iconKost.png');
+        
+            function generateHeader(doc) {
+              const currentDate = format(new Date(), 'EEEE, dd MMMM yyyy', { locale: id });
+        
+              doc.image(logoPath, 50, 45, { width: 50 })
+                .fillColor('#444444')
+                .fontSize(20)
+                .text('Get-KOST App.', 110, 57)
+                .fontSize(10)
+                .text('Jakarta', 200, 65, { align: 'right' })
+                .text(currentDate, 200, 80, { align: 'right' })
+                .moveDown();
+            }
+    
+            function generateFooter(doc) {
+                doc.fontSize(10)
+                  .text('Terima kasih telah menggunakan layanan kami.', 50, 780, { align: 'right', width: 500 });
+              }
+    
 
     // Buat file PDF
     const doc = new PDFDocument({ margin: 30, size: 'A4' });
@@ -26,11 +49,12 @@ const getAllKostReport = async (req, res) => {
     doc.pipe(writeStream);
 
     // Tambahkan judul
-    doc.fontSize(18).text('All Kost Report', { align: 'center' });
-    doc.moveDown();
+    generateHeader(doc);
+    doc.fontSize(18).text('All Kost Report', 50, 110, { align: 'center' });
+    doc.moveDown(1.5);
 
     // Header tabel
-    const tableTop = 100;
+    const tableTop = 150;
     let y = tableTop;
 
     doc.fontSize(12).text('No', 50, y);
@@ -54,6 +78,7 @@ const getAllKostReport = async (req, res) => {
       y += 20;
     });
 
+    generateFooter(doc);
     doc.end();
 
     // Tunggu file selesai dibuat, lalu kirim sebagai respons
