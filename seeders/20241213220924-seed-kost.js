@@ -433,9 +433,9 @@ module.exports = {
         jarak_id: Math.floor(Math.random() * 5) + 1,
         keamanan_id: Math.floor(Math.random() * 5) + 1,
         photos: JSON.stringify([
-          'https://lh5.googleusercontent.com/p/AF1QipOg9eygvI-HuymohNuDG_zGKXKUnJRG8EpLLCUW=w408-h306-k-no',
+          'https://res.cloudinary.com/ksarifudin/image/upload/v1739909767/kost_photos/AF1QipOg9eygvI-HuymohNuDG_zGKXKUnJRG8EpLLCUW_w408-h306-k-no_ft9mis.jpg',
         ]),
-        thumb_image: 'https://lh5.googleusercontent.com/p/AF1QipOg9eygvI-HuymohNuDG_zGKXKUnJRG8EpLLCUW=w408-h306-k-no',
+        thumb_image: 'https://res.cloudinary.com/ksarifudin/image/upload/v1739909767/kost_photos/AF1QipOg9eygvI-HuymohNuDG_zGKXKUnJRG8EpLLCUW_w408-h306-k-no_ft9mis.jpg',
         created_at: new Date(),
         updated_at: new Date(),
       },
@@ -481,9 +481,9 @@ module.exports = {
         jarak_id: Math.floor(Math.random() * 5) + 1,
         keamanan_id: Math.floor(Math.random() * 5) + 1,
         photos: JSON.stringify([
-          'https://lh5.googleusercontent.com/p/AF1QipOnlmtC9mbVtf2Fklp_chj6dQJdz-c3pehkv1Yz=w408-h544-k-no',
+          'https://res.cloudinary.com/ksarifudin/image/upload/v1739909865/kost_photos/AF1QipMRHngXd8nLhnmXLuKdmuHehXXEk2RZ9ktON_59_w408-h306-k-no_uvilxc.jpg',
         ]),
-        thumb_image: 'https://lh5.googleusercontent.com/p/AF1QipOnlmtC9mbVtf2Fklp_chj6dQJdz-c3pehkv1Yz=w408-h544-k-no',
+        thumb_image: 'https://res.cloudinary.com/ksarifudin/image/upload/v1739909865/kost_photos/AF1QipMRHngXd8nLhnmXLuKdmuHehXXEk2RZ9ktON_59_w408-h306-k-no_uvilxc.jpg',
         created_at: new Date(),
         updated_at: new Date(),
       },
