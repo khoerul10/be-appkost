@@ -111,7 +111,7 @@ module.exports = {
         allowNull: true,
       },
       thumb_image: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.STRING(500),
         allowNull: true,
       },
       created_at: {
